@@ -39,12 +39,9 @@ This installation uses **project-level** (local) setup, meaning Ralph Wiggum wil
 
 ### Option 1: Automatic Installation (Recommended)
 
-Run a single command from your project directory:
+Open **PowerShell** in your project directory and run:
 
 ```powershell
-# Navigate to your project directory
-cd C:\path\to\your\project
-
 # Download and run installer
 irm https://raw.githubusercontent.com/mannnrachman/ralph-wiggum-windows/main/install.ps1 | iex
 ```
