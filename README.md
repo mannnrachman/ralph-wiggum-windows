@@ -297,6 +297,24 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 - Restart Claude Code VSCode extension
 - Check frontmatter format in command files
 
+### Debug Logging
+
+The stop hook writes debug logs to `.claude/ralph-debug.log`. Check this file to diagnose issues:
+
+```powershell
+# View debug log
+Get-Content .claude/ralph-debug.log
+
+# Watch log in real-time
+Get-Content .claude/ralph-debug.log -Wait -Tail 20
+```
+
+The log includes:
+- Hook trigger events
+- State file parsing results
+- Iteration tracking
+- Error messages with details
+
 ---
 
 ## Contributing
@@ -314,6 +332,27 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Changelog
+
+### v1.1.0 (Latest)
+
+**Bug Fixes:**
+- Fixed `ralph-loop.md` path issue: Changed from `${CLAUDE_PLUGIN_ROOT}` to relative path `.claude/scripts/setup-ralph-loop.ps1`
+- Fixed argument parsing in `setup-ralph-loop.ps1` when Claude Code passes all arguments as a single string
+- Simplified `cancel-ralph.md` command logic
+
+**Improvements:**
+- Added debug logging to `stop-hook.ps1` - logs written to `.claude/ralph-debug.log`
+- Added `/help-ralph` command for comprehensive documentation
+- Completion promise instructions now displayed after setup script runs
+- Removed `hide-from-slash-command-tool` flag so commands are visible
+
+### v1.0.0
+
+- Initial release with Windows PowerShell support
+
+---
 
 ## Related Links
 

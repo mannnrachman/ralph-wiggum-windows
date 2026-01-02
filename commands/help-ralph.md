@@ -44,7 +44,7 @@ Start a Ralph loop in your current session.
 - `--completion-promise <text>` - Promise phrase to signal completion
 
 **How it works:**
-1. Creates `.claude/.ralph-loop.local.md` state file
+1. Creates `.claude/ralph-loop.local.md` state file
 2. You work on the task
 3. When you try to exit, stop hook intercepts
 4. Same prompt fed back
@@ -66,7 +66,7 @@ Cancel an active Ralph loop (removes the loop state file).
 
 ## Windows-Specific Notes
 
-This is a Windows-compatible fork that uses PowerShell instead of bash/jq:
+This is a Windows-compatible implementation that uses PowerShell instead of bash/jq:
 
 - **Stop hook**: `stop-hook.ps1` (PowerShell)
 - **Setup script**: `setup-ralph-loop.ps1` (PowerShell)
@@ -111,4 +111,4 @@ The "loop" doesn't mean Claude talks to itself. It means:
 
 - Original technique: https://ghuntley.com/ralph/
 - Original plugin: https://github.com/anthropics/claude-code/tree/main/plugins/ralph-wiggum
-- Windows issue: https://github.com/anthropics/claude-code/issues/14817
+- Windows fork: https://github.com/mannnrachman/ralph-wiggum-windows

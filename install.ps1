@@ -56,7 +56,7 @@ Write-Host "[3/5] Copying files..." -ForegroundColor Green
 # Commands
 Copy-Item "$repoDir/commands/ralph-loop.md" "$claudeDir/commands/ralph-loop.md" -Force
 Copy-Item "$repoDir/commands/cancel-ralph.md" "$claudeDir/commands/cancel-ralph.md" -Force
-Copy-Item "$repoDir/commands/help.md" "$claudeDir/commands/help-ralph.md" -Force
+Copy-Item "$repoDir/commands/help-ralph.md" "$claudeDir/commands/help-ralph.md" -Force
 Write-Host "      Copied commands" -ForegroundColor Gray
 
 # Hooks

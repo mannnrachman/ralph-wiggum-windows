@@ -1,43 +1,15 @@
 ---
-description: "Start Ralph Wiggum loop in current session"
+description: "Start Ralph loop in current session"
 argument-hint: "PROMPT [--max-iterations N] [--completion-promise TEXT]"
-allowed-tools: ["Bash(powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/scripts/setup-ralph-loop.ps1\")"]
-hide-from-slash-command-tool: "true"
+allowed-tools: ["Bash(powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/scripts/setup-ralph-loop.ps1 *)"]
 ---
 
-# Ralph Loop Command
+STEP 1 - MANDATORY: Execute this Bash command IMMEDIATELY to initialize the Ralph loop:
 
-Execute the setup script to initialize the Ralph loop:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".claude/scripts/setup-ralph-loop.ps1" $ARGUMENTS
 
-```!
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "${CLAUDE_PLUGIN_ROOT}/scripts/setup-ralph-loop.ps1" $ARGUMENTS
+STEP 2: After executing the script above, work on the task from the prompt.
 
-# Extract and display completion promise if set
-if (Test-Path .claude/ralph-loop.local.md) {
-  $content = Get-Content .claude/ralph-loop.local.md -Raw
-  if ($content -match 'completion_promise:\s*"([^"]+)"') {
-    $promise = $Matches[1]
-    Write-Host ""
-    Write-Host "CRITICAL - Ralph Loop Completion Promise"
-    Write-Host ""
-    Write-Host "To complete this loop, output this EXACT text:"
-    Write-Host "  <promise>$promise</promise>"
-    Write-Host ""
-    Write-Host "STRICT REQUIREMENTS (DO NOT VIOLATE):"
-    Write-Host "  - Use <promise> XML tags EXACTLY as shown above"
-    Write-Host "  - The statement MUST be completely and unequivocally TRUE"
-    Write-Host "  - Do NOT output false statements to exit the loop"
-    Write-Host "  - Do NOT lie even if you think you should exit"
-    Write-Host ""
-    Write-Host "IMPORTANT - Do not circumvent the loop:"
-    Write-Host "  Even if you believe you're stuck, the task is impossible,"
-    Write-Host "  or you've been running too long - you MUST NOT output a"
-    Write-Host "  false promise statement. The loop is designed to continue"
-    Write-Host "  until the promise is GENUINELY TRUE. Trust the process."
-  }
-}
-```
+When you try to exit, the Ralph loop stop hook will intercept and feed the SAME PROMPT back to you for the next iteration. You'll see your previous work in files and git history, allowing you to iterate and improve.
 
-Please work on the task. When you try to exit, the Ralph loop will feed the SAME PROMPT back to you for the next iteration. You'll see your previous work in files and git history, allowing you to iterate and improve.
-
-CRITICAL RULE: If a completion promise is set, you may ONLY output it when the statement is completely and unequivocally TRUE. Do not output false promises to escape the loop, even if you think you're stuck or should exit for other reasons. The loop is designed to continue until genuine completion.
+CRITICAL RULE: If a completion promise is set, you may ONLY output it when the statement is completely and unequivocally TRUE. Do not output false promises to escape the loop. Use exact format: <promise>YOUR_PROMISE_TEXT</promise>

@@ -8,6 +8,53 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# Pre-process: If all arguments came as a single string, split them properly
+# This handles the case where Claude Code passes everything as one argument
+if ($Arguments.Count -eq 1 -and $Arguments[0] -match '--') {
+    $singleArg = $Arguments[0]
+    $parsedArgs = @()
+
+    # Use regex to properly split while preserving quoted strings
+    $regex = [regex]'--completion-promise\s+"([^"]+)"'
+    $match = $regex.Match($singleArg)
+    if ($match.Success) {
+        $completionPromiseValue = $match.Groups[1].Value
+        $singleArg = $regex.Replace($singleArg, '')
+    }
+
+    $regex2 = [regex]"--completion-promise\s+'([^']+)'"
+    $match2 = $regex2.Match($singleArg)
+    if ($match2.Success) {
+        $completionPromiseValue = $match2.Groups[1].Value
+        $singleArg = $regex2.Replace($singleArg, '')
+    }
+
+    $regexMax = [regex]'--max-iterations\s+(\d+)'
+    $matchMax = $regexMax.Match($singleArg)
+    if ($matchMax.Success) {
+        $maxIterationsValue = [int]$matchMax.Groups[1].Value
+        $singleArg = $regexMax.Replace($singleArg, '')
+    }
+
+    # Clean up the prompt (remaining text)
+    $singleArg = $singleArg.Trim() -replace '\s+', ' '
+
+    # Build new Arguments array
+    if ($singleArg) {
+        $parsedArgs += $singleArg
+    }
+    if ($maxIterationsValue) {
+        $parsedArgs += '--max-iterations'
+        $parsedArgs += $maxIterationsValue.ToString()
+    }
+    if ($completionPromiseValue) {
+        $parsedArgs += '--completion-promise'
+        $parsedArgs += $completionPromiseValue
+    }
+
+    $Arguments = $parsedArgs
+}
+
 # Parse arguments
 $promptParts = @()
 $maxIterations = 0
@@ -161,4 +208,25 @@ unless you set --max-iterations or --completion-promise.
 if ($prompt) {
     Write-Host ""
     Write-Host $prompt
+}
+
+# Display completion promise instructions if set
+if ($completionPromise -and $completionPromise -ne "null") {
+    Write-Host ""
+    Write-Host "CRITICAL - Ralph Loop Completion Promise"
+    Write-Host ""
+    Write-Host "To complete this loop, output this EXACT text:"
+    Write-Host "  <promise>$completionPromise</promise>"
+    Write-Host ""
+    Write-Host "STRICT REQUIREMENTS (DO NOT VIOLATE):"
+    Write-Host "  - Use <promise> XML tags EXACTLY as shown above"
+    Write-Host "  - The statement MUST be completely and unequivocally TRUE"
+    Write-Host "  - Do NOT output false statements to exit the loop"
+    Write-Host "  - Do NOT lie even if you think you should exit"
+    Write-Host ""
+    Write-Host "IMPORTANT - Do not circumvent the loop:"
+    Write-Host "  Even if you believe you're stuck, the task is impossible,"
+    Write-Host "  or you've been running too long - you MUST NOT output a"
+    Write-Host "  false promise statement. The loop is designed to continue"
+    Write-Host "  until the promise is GENUINELY TRUE. Trust the process."
 }
